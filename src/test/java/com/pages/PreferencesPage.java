@@ -1,5 +1,7 @@
 package com.pages;
 
+import com.Utilities.TarrifType;
+import cucumber.api.java.ca.I;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
@@ -14,6 +16,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class PreferencesPage extends PageObject {
+
+    private final String INTERESTED_TARIFF = "Interested Tarrif";
+    private final String PAYMENT_TYPE = "Payment type";
+    private final String REFINE_RESULTS = "Refine Results";
+    private final String EMAIL_ADDRESS = "Email address";
+    private final String EMAIL_SUBMIT_ID = "email-submit";
+
     @FindBy(id = "email-submit")
     private WebElementFacade goToPrices;
 
@@ -42,27 +51,27 @@ public class PreferencesPage extends PageObject {
         Set<String> keys = info.keySet();
         for(String key:keys){
             switch (key){
-                case "Interested Tarrif":
-                    if(info.get("Interested Tarrif").contains("Variable tarrif")){
+                case INTERESTED_TARIFF:
+                    if(info.get(INTERESTED_TARIFF).contains(TarrifType.VAR.getTarrif())){
                         variableTarrif.click();
                     }
                     break;
-                case "Payment type":
+                case PAYMENT_TYPE:
                     ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.id("payment-selection-question")));
-                    if(info.get("Payment type").contains("Monthly direct debit")){
+                    if(info.get(PAYMENT_TYPE).contains("Monthly direct debit")){
                         monthlyDirectDebit.click();
                     }
                     break;
-                case "Refine Results":
+                case REFINE_RESULTS:
                     ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.id("same-supplier-question")));
-                    if(info.get("Refine Results").contains("No")){
+                    if(info.get(REFINE_RESULTS).contains("No")){
                         getDriver().findElement(By.cssSelector("label[for='same-supplier-no']")).click();
                     };
                     break;
 
-                case "Email address":
+                case EMAIL_ADDRESS:
                     ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.id("Email")));
-                    getDriver().findElement(By.id("Email")).sendKeys(info.get("Email address"));
+                    getDriver().findElement(By.id("Email")).sendKeys(info.get(EMAIL_ADDRESS));
                     break;
             }
         }
@@ -74,7 +83,7 @@ public class PreferencesPage extends PageObject {
     }
 
     public void checkPrices() {
-        getDriver().findElement(By.id("email-submit")).click();
+        getDriver().findElement(By.id(EMAIL_SUBMIT_ID)).click();
     }
 
     public void verifyErrorIsShown(String error) {

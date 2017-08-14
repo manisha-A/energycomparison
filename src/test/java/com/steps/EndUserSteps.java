@@ -88,4 +88,9 @@ public class EndUserSteps {
     public void afterScenario() {
         energyhomepage.after();
     }
+
+    @Step
+    public void doesNotHasBill() {
+        energyhomepage.userSelectsNoBill();
+    }
 }

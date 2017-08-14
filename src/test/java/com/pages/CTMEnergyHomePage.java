@@ -15,13 +15,20 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.List;
 
 public class CTMEnergyHomePage extends PageObject {
+
+    private final String DUAL = "dual";
+    private final String GAS = "gas";
+    private final String ELEC = "electricity";
+    private final String CTM_URL = "https://energy.comparethemarket.com/energy/v2/?AFFCLIE=TSTT";
+    private final String FIND_POSTCODE = "find-postcode";
+
     @FindBy(id = "your-postcode")
     private WebElementFacade postcodeInput;
 
     @FindBy(id = "find-postcode")
     private WebElementFacade findPostcode;
 
-    @FindBy(id = "have-bill")
+    @FindBy(css = "label[for='have-bill']")
     private WebElementFacade haveBill;
 
     @FindBy(css = "label[for='compare-what-gas']")
@@ -30,7 +37,7 @@ public class CTMEnergyHomePage extends PageObject {
     @FindBy(id = "goto-your-supplier-details")
     private WebElementFacade next;
 
-    @FindBy(id = "compare-what-electricity")
+    @FindBy(css = "label[for='compare-what-electricity']")
     private WebElementFacade compareElectricity;
 
     @FindBy(css = "input[id='compare-what-both']")
@@ -39,13 +46,19 @@ public class CTMEnergyHomePage extends PageObject {
     @FindBy(id = "gas-energy-suppliers-question")
     private WebElement gasSuppliers;
 
+    @FindBy(id = "elec-energy-suppliers-question")
+    private WebElement elecSuppliers;
+
+    @FindBy(css = "label[for='no-bill']")
+    private WebElementFacade noBill;
+
     public void navigate() {
-        getDriver().get("https://energy.comparethemarket.com/energy/v2/?AFFCLIE=TSTT");
+        getDriver().get(CTM_URL);
     }
 
     public void findsPostcode() {
         findPostcode.click();
-        waitFor(ExpectedConditions.invisibilityOf(getDriver().findElement(By.id("find-postcode"))));
+        waitFor(ExpectedConditions.invisibilityOf(getDriver().findElement(By.id(FIND_POSTCODE))));
     }
 
     public void entersPostcode(String postcode) {
@@ -53,13 +66,7 @@ public class CTMEnergyHomePage extends PageObject {
     }
 
     public void userSelectsHasBill() {
-        final List<WebElement> radios = getDriver().findElements(By.name("bill-nobill"));
-
-        for (WebElement radio : radios) {
-            if (radio.getText().contains("Yes")) {
-                radio.click();
-            }
-        }
+        haveBill.click();
     }
 
     public void compare(String compareOption) {
@@ -70,7 +77,9 @@ public class CTMEnergyHomePage extends PageObject {
             case "Gas only":
                 compareGas.click();
                 break;
-
+            case "Electricity only":
+                compareElectricity.click();
+                break;
         }
     }
 
@@ -78,26 +87,24 @@ public class CTMEnergyHomePage extends PageObject {
         next.click();
     }
 
-    private void hoverAndClick(WebElementFacade element){
-        Actions a1 = new Actions(getDriver());
-        a1.moveToElement(element)
-                .click()
-                .build()
-                .perform();
-    }
-
     public void selectGasSupplier(String type,String supplier) {
         List<WebElement> radios = null;
         switch (type){
-            case "dual":
+            case DUAL:
                 Select select = new Select(getDriver().findElement(By.id("sel")));
                 select.selectByVisibleText("Breeze");
-//                WebElement sse = getDriver().findElement(By.cssSelector("input[id='dual-top-six-sse']"));
-//                ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", sse);
-//                sse.click();
                 break;
-            case "gas":
+            case GAS:
                 radios = gasSuppliers.findElements(By.tagName("label"));
+                for(WebElement radio:radios){
+                    if(radio.getText().contains(supplier)){
+                        radio.click();
+                        break;
+                    }
+                }
+                break;
+            case ELEC:
+                radios = elecSuppliers.findElements(By.tagName("label"));
                 for(WebElement radio:radios){
                     if(radio.getText().contains(supplier)){
                         radio.click();
@@ -110,5 +117,9 @@ public class CTMEnergyHomePage extends PageObject {
 
     public void after() {
         getDriver().quit();
+    }
+
+    public void userSelectsNoBill() {
+        noBill.click();
     }
 }

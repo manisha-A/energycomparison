@@ -2,6 +2,7 @@ package com.stepdefinitions;
 
 
 import com.steps.EndUserSteps;
+import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java8.En;
 import net.thucydides.core.annotations.Steps;
@@ -35,6 +36,10 @@ public class HomeStepdefs implements En {
         And("^user provides the \"([^\"]*)\" supplier as \"([^\"]*)\"$", (String type,String supplier) -> {
             user.selectsGasSupplier(type,supplier);
             user.submitsSupplier();
+        });
+
+        And("^user does not has the bill$", () -> {
+            user.doesNotHasBill();
         });
     }
 }
