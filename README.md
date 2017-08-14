@@ -1,7 +1,9 @@
 **Pre-Conditions**
 
-- Java 8 is installed
+- Java 8 is installed and JAVA_HOME is set
+- Maven 3 is installed and MAVEN_HOME is set
 - chromedriver binary is installed on machine
+
 
 **To Run the tests**
 
