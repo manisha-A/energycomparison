@@ -5,8 +5,11 @@ import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
+import java.security.Key;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,14 +26,14 @@ public class PreferencesPage extends PageObject {
     @FindBy( id= "same-supplier-question")
     private WebElement supplierQues;
 
-    @FindBy( css= "input[id='same-supplier-no']")
+    @FindBy( css= "label[for='same-supplier-no']")
     private WebElement sameSupplierNo;
 
-    @FindBy( css= "input[id='pre-select-variable']")
+    @FindBy(css = "label[for='pre-select-variable']")
     private WebElement variableTarrif;
 
-    @FindBy( css= "input[id='pre-select-payment-monthly']")
-    private WebElement monthlyDirectDebit;
+    @FindBy( css= "label[for='pre-select-payment-monthly']")
+    private WebElementFacade monthlyDirectDebit;
 
     @FindBy( id= "your-details-view-status")
     private WebElement viewStatus;
@@ -44,10 +47,22 @@ public class PreferencesPage extends PageObject {
                         variableTarrif.click();
                     }
                     break;
-                case "Payment Type":
-                    if(info.get("Payment Type").contains("Monthly direct debit")){
+                case "Payment type":
+                    ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.id("payment-selection-question")));
+                    if(info.get("Payment type").contains("Monthly direct debit")){
                         monthlyDirectDebit.click();
                     }
+                    break;
+                case "Refine Results":
+                    ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.id("same-supplier-question")));
+                    if(info.get("Refine Results").contains("No")){
+                        getDriver().findElement(By.cssSelector("label[for='same-supplier-no']")).click();
+                    };
+                    break;
+
+                case "Email address":
+                    ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.id("Email")));
+                    getDriver().findElement(By.id("Email")).sendKeys(info.get("Email address"));
                     break;
             }
         }

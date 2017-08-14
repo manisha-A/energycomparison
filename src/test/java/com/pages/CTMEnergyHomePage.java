@@ -24,7 +24,7 @@ public class CTMEnergyHomePage extends PageObject {
     @FindBy(id = "have-bill")
     private WebElementFacade haveBill;
 
-    @FindBy(css = "input[value='Gas']")
+    @FindBy(css = "label[for='compare-what-gas']")
     private WebElementFacade compareGas;
 
     @FindBy(id = "goto-your-supplier-details")
@@ -35,6 +35,9 @@ public class CTMEnergyHomePage extends PageObject {
 
     @FindBy(css = "input[id='compare-what-both']")
     private WebElement compareBoth;
+
+    @FindBy(id = "gas-energy-suppliers-question")
+    private WebElement gasSuppliers;
 
     public void navigate() {
         getDriver().get("https://energy.comparethemarket.com/energy/v2/?AFFCLIE=TSTT");
@@ -64,29 +67,11 @@ public class CTMEnergyHomePage extends PageObject {
             case "Gas & Electricity":
                 compareBoth.click();
                 break;
+            case "Gas only":
+                compareGas.click();
+                break;
+
         }
-//        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.cssSelector("input[id='compare-what-gas']")));
-//        waitFor(ExpectedConditions.visibilityOf(getDriver().findElement(By.cssSelector("input[id='compare-what-gas']"))));
-//        getDriver().findElement(By.cssSelector("input[id='compare-what-gas']")).click();
-//        final List<WebElement> radios = getDriver().findElements(By.name("compare-what-energy"));
-//
-//        for (WebElement radio : radios) {
-//            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", radio);
-//            System.out.println("**");
-//            System.out.println(radio.getAttribute("value"));
-//            System.out.println("**");
-//            if (radio.getAttribute("value").equals(compareOption)) {
-//                System.out.println("**");
-//                System.out.println("inside");
-//                System.out.println("**");
-//                radio.getAttribute("Selected");
-//                Actions a1 = new Actions(getDriver());
-//                a1.moveToElement(radio)
-//                        .click()
-//                        .build()
-//                        .perform();
-//            }
-//        }
     }
 
     public void submitSupplier() {
@@ -112,21 +97,18 @@ public class CTMEnergyHomePage extends PageObject {
 //                sse.click();
                 break;
             case "gas":
-                radios = getDriver().findElements(By.name("gas-top-six"));
+                radios = gasSuppliers.findElements(By.tagName("label"));
+                for(WebElement radio:radios){
+                    if(radio.getText().contains(supplier)){
+                        radio.click();
+                        break;
+                    }
+                }
                 break;
         }
+    }
 
-//        for (WebElement radio : radios) {
-//            System.out.println("********");
-//            System.out.println(radio.getText());
-//            System.out.println(radio.getAttribute("value"));
-//            System.out.println("********");
-//            if (radio.getAttribute("value").equals(supplier)) {
-//                System.out.println("********");
-//                System.out.println(radio.getText());
-//                System.out.println("********");
-//                radio.click();
-//            }
-//        }
+    public void after() {
+        getDriver().quit();
     }
 }

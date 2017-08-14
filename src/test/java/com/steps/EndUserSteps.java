@@ -3,6 +3,7 @@ package com.steps;
 import com.pages.CTMEnergyHomePage;
 import com.pages.PreferencesPage;
 import com.pages.RecentBillPage;
+import com.pages.ResultsPage;
 import net.thucydides.core.annotations.Step;
 
 import java.util.Map;
@@ -14,6 +15,7 @@ public class EndUserSteps {
     CTMEnergyHomePage energyhomepage;
     RecentBillPage billpage;
     PreferencesPage preferencespage;
+    ResultsPage resultspage;
 
     @Step
     public void navigatesToCTMEnergyHomePage() {
@@ -75,5 +77,15 @@ public class EndUserSteps {
     @Step
     public void verifyError(String error) {
         preferencespage.verifyErrorIsShown(error);
+    }
+
+    @Step
+    public void isUserOnResultsPage() {
+        resultspage.isOnResultsPage();
+    }
+
+    @Step
+    public void afterScenario() {
+        energyhomepage.after();
     }
 }

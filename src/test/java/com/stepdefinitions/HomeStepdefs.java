@@ -2,12 +2,18 @@ package com.stepdefinitions;
 
 
 import com.steps.EndUserSteps;
+import cucumber.api.java.After;
 import cucumber.api.java8.En;
 import net.thucydides.core.annotations.Steps;
 
 public class HomeStepdefs implements En {
     @Steps
     EndUserSteps user;
+
+    @After
+    public void afterScenario(){
+        user.afterScenario();
+    }
 
     public HomeStepdefs() {
         Given("^user is on CTM energy comparison home$", () -> {
